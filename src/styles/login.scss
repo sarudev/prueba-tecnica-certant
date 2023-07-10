@@ -1,0 +1,65 @@
+.container {
+  width: 380px;
+  aspect-ratio: 10 / 16;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: cornflowerblue;
+  border: 1px lightgrey solid;
+
+  h1 {
+    font-size: 1.625rem;
+    line-height: 200%;
+  }
+
+  form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1 0 0;
+    border-top: 1px lightgray solid;
+    gap: 20px;
+
+    input,
+    button {
+      font-size: 1.2rem;
+      width: 80%;
+      height: max-content;
+      padding: 16px;
+      border: 1px lightgrey solid;
+
+      &::placeholder {
+        text-align: center;
+        color: cornflowerblue;
+      }
+
+      &:focus,
+      &:hover {
+        outline: none;
+        border-color: cornflowerblue;
+      }
+
+      &:focus {
+        border-width: 2px;
+      }
+    }
+
+    .error {
+      // background-color: ;
+    }
+
+    button {
+      margin-top: 10px;
+      color: white;
+      background-color: cornflowerblue;
+      cursor: pointer;
+
+      &:hover {
+        border-color: black;
+      }
+    }
+  }
+}
