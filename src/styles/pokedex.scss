@@ -42,7 +42,7 @@
       text-decoration: none;
     }
 
-    > *:nth-child(1) {
+    > *:nth-child(odd) {
       background-color: #ffffff;
       color: #6495ed;
       outline: 1px solid #6495ed;
@@ -53,7 +53,7 @@
       }
     }
 
-    > *:nth-child(2) {
+    > *:nth-child(even) {
       background-color: #6495ed;
       color: #ffffff;
 

@@ -1,7 +1,7 @@
 import { type LoaderFunctionArgs, redirect } from 'react-router-dom'
-import userLoggedIn from '../../utils/userLoggedIn'
 import { type PokemonLoaderData } from '../../types/componentProps'
 import { getPokemon, nextEvolution } from '../../utils/pokemon'
+import { userLoggedIn } from '../../utils/user'
 
 export async function loader ({ params }: LoaderFunctionArgs) {
   const isLoggedIn = userLoggedIn()
