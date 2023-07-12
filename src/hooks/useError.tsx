@@ -13,7 +13,7 @@ export default function useError () {
       // se está modificando un componente,
       // puesto que al re-renderizarlo, el estado
       // se actualiza, lo que ocasiona que
-      // este timeout se vuelva loco
+      // el timeout se vuelva loco
       clearTimeout(timeoutId)
     }
   }, [error])
