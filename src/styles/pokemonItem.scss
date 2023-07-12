@@ -54,7 +54,7 @@
       pointer-events: none;
       transition: opacity .25s ease;
       position: absolute;
-      left: 125%;
+      left: 135%;
       background-color: whitesmoke;
       border: 1px solid lightgray;
       padding: 5px;
@@ -62,6 +62,19 @@
       flex-direction: column;
       gap: 5px;
       border-radius: 5px;
+
+      &::after {
+        content: '';
+        position: absolute;
+        height: 15px;
+        aspect-ratio: 1;
+        background-color: whitesmoke;
+        top: 50%;
+        transform: translateY(-50%) translateX(-100%) rotate(45deg);
+        border-left: 1px solid lightgray;
+        border-bottom: 1px solid lightgray;
+        border-top-right-radius: 100%;
+      }
 
       .text {
         font-size: 0.8rem;

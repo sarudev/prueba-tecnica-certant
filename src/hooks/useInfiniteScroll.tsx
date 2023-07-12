@@ -14,7 +14,7 @@ export default function useInfiniteScroll (fetchMore: (abortController?: AbortCo
   const handleScroll: React.UIEventHandler<HTMLUListElement> = (e) => {
     if (pokeListRef.current == null) return
 
-    if (pokeListRef.current.clientHeight + pokeListRef.current.scrollTop !== pokeListRef.current.scrollHeight || isLoading) {
+    if (pokeListRef.current.clientHeight + pokeListRef.current.scrollTop < pokeListRef.current.scrollHeight - 20 || isLoading) {
       return
     }
 
