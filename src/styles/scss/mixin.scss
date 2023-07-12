@@ -1,0 +1,6 @@
+@import './animations.scss';
+
+@mixin animationMove($delay) {
+  animation: move .5s ease $delay forwards;
+  -webkit-animation: move .5s ease $delay forwards;
+}

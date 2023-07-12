@@ -47,6 +47,26 @@ body {
 #root {
   width: 100%;
   height: 100%;
-  display: grid;
-  place-content: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+
+  > *:hover {
+    border-color: cornflowerblue;
+  }
+
+  &:hover,
+  &:hover:visited {
+    color: blue;
+  }
+
+  &:visited,
+  &:active {
+    color: inherit;
+  }
 }

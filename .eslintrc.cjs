@@ -33,6 +33,8 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 'off',
     'curly': 'off',
     '@typescript-eslint/no-unused-vars': 'warn',
-    '@typescript-eslint/no-confusing-void-expression': 'off'
+    '@typescript-eslint/no-confusing-void-expression': 'off',
+    '@typescript-eslint/no-non-null-assertion': 'off',
+    '@typescript-eslint/consistent-type-assertions': 'off'
   }
 }
