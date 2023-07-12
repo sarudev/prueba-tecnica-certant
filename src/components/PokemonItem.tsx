@@ -1,24 +1,22 @@
-import { useEffect, useRef } from 'react'
-import { generateBackgroundColor } from '../utils/colors'
 import { firstUpper } from '../utils/text'
 import { type PokemonResponse } from '../types/types'
 import '../styles/pokemonItem.scss'
+import { useMemo } from 'react'
+import useHoverTypeText from './useHoverTypeText'
+import { generateBackgroundColor } from '../utils/colors'
 
 export default function PokemonItem ({ pokemon }: { pokemon: PokemonResponse }) {
-  const typesRef = useRef<HTMLDivElement>(null)
+  const types = useMemo(() => pokemon.types.map(t => t.type.name), [])
 
-  useEffect(() => {
-    if (typesRef.current == null) return
-
-    const pokeTypes = pokemon.types.map(t => t.type.name)
-
-    typesRef.current.style.background = generateBackgroundColor(pokeTypes)
-  }, [])
+  const textTypesRef = useHoverTypeText(types)
 
   return (
     <li className="pokeitem">
-      <div className="type">
-        <div className="color" ref={typesRef} />
+      <div className="type" ref={textTypesRef}>
+        <div className="type-name">
+          {types.map(t => <span key={t} className='text' style={{ background: `var(--${t})` }}>{firstUpper(t)}</span>)}
+        </div>
+        <div className="color" style={{ background: generateBackgroundColor(types) }} />
       </div>
       <div className="name">{firstUpper(pokemon.name)}</div>
       <div className="lvl">{pokemon.base_experience}</div>

@@ -16,6 +16,9 @@ export default function usePokemones (get: number) {
     void fetchMore(abortController)
 
     return () => {
+      // abortar operación en caso de
+      // que el componente se
+      // des-renderice
       abortController.abort()
     }
   }, [])
@@ -25,13 +28,9 @@ export default function usePokemones (get: number) {
     offset.current += get
     const data = await response.json() as SimplePokemonResponse
 
-    const pokes = [] as PokemonResponse[]
-
     for (const url of data.results) {
       const response = await fetch(url.url)
       const data = await response.json() as PokemonResponse
-      // pokes.push(data)
-      // console.log(data)
       setPokemones(prevPokemones => [...prevPokemones, data])
     }
   }
