@@ -1,11 +1,11 @@
 import 'vite/client'
-import type { PokemonResponse } from './types.d.ts'
+import type { PokemonResponse, PokemonTypes } from './types.d.ts'
 import { type Params } from 'react-router-dom'
 
 export interface PokemonItemWithoutTypeTextProps {
   children?: JSX.Element // me gustaría que solo permite aceptar PokemonTypeName, pero no pude lograrlo
   textTypesRef?: React.RefObject<HTMLDivElement>
-  types: string[]
+  types: PokemonTypes[]
   name: string
   baseExperience: number | string
   sprite?: string
