@@ -88,6 +88,7 @@
   .sprite {
     height: 100%;
     aspect-ratio: 1;
+    flex-shrink: 0;
   }
 
   .lvl {

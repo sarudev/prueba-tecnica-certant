@@ -1,7 +1,7 @@
-import { useRef } from 'react'
+import { memo, useRef } from 'react'
 import { type PokemonTypes } from '../types/types'
 
-export default function TypeCheckbox ({ type, types, setTypes }: { type: PokemonTypes, types: PokemonTypes[], setTypes: React.Dispatch<React.SetStateAction<PokemonTypes[]>> }) {
+function TypeCheckbox ({ type, types, setTypes }: { type: PokemonTypes, types: PokemonTypes[], setTypes: React.Dispatch<React.SetStateAction<PokemonTypes[]>> }) {
   const checkRef = useRef<HTMLInputElement>(null)
 
   const handleChange = () => {
@@ -30,3 +30,5 @@ export default function TypeCheckbox ({ type, types, setTypes }: { type: Pokemon
     </div>
   )
 }
+
+export default memo(TypeCheckbox)

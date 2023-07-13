@@ -1,13 +1,11 @@
 import { type PokemonTypes, type PokemonResponse } from '../types/types'
-import '../styles/pokemonItemEdit.scss'
-import { useState } from 'react'
+import { memo, useState } from 'react'
 import { generateBackgroundColor } from '../utils/colors'
 import TypeCheckbox from './TypeCheckbox'
 import { availibleTypes } from '../utils/pokemon'
-import Input from './Input'
+import '../styles/pokemonItemEdit.scss'
 
-export default function PokemonItemEdit ({ pokemon, sprite }: { pokemon: PokemonResponse | null, sprite: string }) {
-  const [lvl, setLvl] = useState(pokemon?.base_experience ?? 0)
+function PokemonItemEdit ({ pokemon, sprite }: { pokemon: PokemonResponse | null, sprite: string }) {
   const [types, setTypes] = useState<PokemonTypes[]>([...(pokemon?.types.map(t => t.type.name) ?? [])])
   const [typesListVisible, toggle] = useState(false)
 
@@ -19,9 +17,11 @@ export default function PokemonItemEdit ({ pokemon, sprite }: { pokemon: Pokemon
           {availibleTypes.map(t => <TypeCheckbox key={t} type={t} types={types} setTypes={setTypes} />)}
         </div>
       </div>
-      <Input name='pokemon-name' className="name" placeholder='Pokemon name' value={pokemon?.name ?? ''} required />
+      <input name='pokemon-name' className="name" placeholder='Pokemon name' defaultValue={pokemon?.name ?? ''} required />
       {sprite != null && <img className='sprite' src={sprite} alt={`Artwork of ${pokemon?.name ?? ''}`} />}
-      <input name='pokemon-lvl' className="lvl" value={lvl} onChange={e => setLvl(Math.max(1, Math.min(999, Number(e.target.value))))} type='number' placeholder='lvl' max={999} min={0} />
+      <input name='pokemon-lvl' className="lvl" defaultValue={pokemon?.base_experience ?? 0} type='number' placeholder='lvl' max={999} min={0} />
     </div>
   )
 }
+
+export default memo(PokemonItemEdit)

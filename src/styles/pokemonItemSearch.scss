@@ -37,4 +37,16 @@
       }
     }
   }
+
+  .delete {
+    height: 100%;
+    flex-shrink: 0;
+    aspect-ratio: 1;
+    cursor: pointer;
+
+    &:hover {
+      outline: 1px solid coral;
+      color: coral;
+    }
+  }
 }

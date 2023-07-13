@@ -1,4 +1,9 @@
-export function generateBackgroundColor (types: string[]) {
+import { type Nullable, type PokemonTypes } from '../types/types'
+
+export function generateBackgroundColor (types: PokemonTypes[] | Nullable) {
+  if (types == null)
+    return 'white'
+
   if (types.length < 2)
     return toCSSVar(types[0])
 

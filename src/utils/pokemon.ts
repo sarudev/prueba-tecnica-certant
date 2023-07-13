@@ -1,4 +1,4 @@
-import type { PokemonSpecie, PokemonResponse, PokemonEvolution, PokemonEvolutionResponse, PokemonTypes, SimplePokemonResponse, CustomPokemon } from '../types/types'
+import type { PokemonSpecie, PokemonResponse, PokemonEvolution, PokemonEvolutionResponse, PokemonTypes, SimplePokemonResponse, CustomPokemon, Nullable } from '../types/types'
 
 const { VITE_POKEAPI_URL } = import.meta.env as Record<string, string>
 
@@ -110,7 +110,7 @@ export function createPokemon (pokemon: Omit<CustomPokemon, 'pokeId'>) {
 
   let minId = 0
   for (const poke of customPokemon) {
-    if (poke.pokeId < minId) minId = poke.pokeId
+    if (poke.pokemon.id < minId) minId = poke.pokemon.id
   }
 
   const newPoke: CustomPokemon = {
@@ -118,21 +118,38 @@ export function createPokemon (pokemon: Omit<CustomPokemon, 'pokeId'>) {
     pokeId: minId - 1
   }
 
-  customPokemon.push(newPoke)
+  customPokemon.push({ pokemon: convert(newPoke), evolution: pokemon.pokeEvo })
   window.localStorage.setItem('custom-pokemon', JSON.stringify(customPokemon))
 }
 
 export function editPokemon (pokemon: CustomPokemon) {
   const customPokemon = getSavedPokemon()
 
-  const pokeIdx = customPokemon.findIndex(p => p.pokeId === pokemon.pokeId)
+  const pokeIdx = customPokemon.findIndex(p => p.pokemon.id === pokemon.pokeId)
 
   if (pokeIdx > -1) {
     customPokemon.splice(pokeIdx, 1)
   }
 
-  customPokemon.push(pokemon)
+  customPokemon.push({ pokemon: convert(pokemon), evolution: pokemon.pokeEvo })
   window.localStorage.setItem('custom-pokemon', JSON.stringify(customPokemon))
+}
+
+function convert (poke: CustomPokemon): PokemonResponse {
+  return {
+    abilities: poke.pokeAbi.map(a => ({ ability: { name: a, url: '' }, is_hidden: false, slot: 0 })),
+    base_experience: poke.pokeLvl,
+    id: poke.pokeId,
+    name: poke.pokeName,
+    sprites: {
+      other: {
+        'official-artwork': {
+          front_default: poke.pokeImg
+        }
+      }
+    },
+    types: poke.pokeTypes.map(t => ({ slot: 1, type: { name: t as PokemonTypes, url: '' } }))
+  }
 }
 
 export function getSavedPokemon () {
@@ -143,7 +160,32 @@ export function getSavedPokemon () {
     customPokemonString = '[]'
   }
 
-  return JSON.parse(customPokemonString) as CustomPokemon[]
+  return JSON.parse(customPokemonString) as Array<{ pokemon: PokemonResponse, evolution: string }>
+}
+
+export async function createCustom (form: FormData): Promise<Omit<CustomPokemon, 'pokeId'> & { pokeId: number | Nullable }> {
+  const pokeId = form.get('pokemon-id') as string | Nullable
+  const pokeName = form.get('pokemon-name') as string
+  const pokeLvl = form.get('pokemon-lvl') as string
+  const pokeImg = form.get('pokemon-image') as string
+  const pokeAbi = form.getAll('ability') as string[]
+  let pokeEvo = form.get('pokemon-evolution') as string
+
+  const evo = await getPokemonByName(pokeEvo)
+  console.log({ evo, pokeEvo })
+  if (evo == null) {
+    pokeEvo = ''
+  }
+
+  const pokeTypes: string[] = []
+  for (const type of availibleTypes) {
+    const data = form.get(`type-${type}`)
+    if (data != null) {
+      pokeTypes.push(type)
+    }
+  }
+
+  return { pokeName, pokeLvl: Number(pokeLvl), pokeImg, pokeTypes, pokeAbi, pokeEvo, pokeId: pokeId != null ? Number(pokeId) : null }
 }
 
 export const availibleTypes: PokemonTypes[] = [

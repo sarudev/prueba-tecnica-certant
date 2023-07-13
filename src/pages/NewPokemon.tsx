@@ -1,38 +1,12 @@
 import { Form, Link } from 'react-router-dom'
 import BottomPanel from '../components/BottomPanel'
-import { useEffect, useState } from 'react'
 import PokemonItemEdit from '../components/PokemonItemEdit'
-import Input from '../components/Input'
 import PokemonItemSearch from '../components/PokemonItemSearch'
-import { getAll, getPokemonByName } from '../utils/pokemon'
-import { type PokemonResponse } from '../types/types'
+import useCreateOrEditPokemon from '../hooks/useCreateOrEditPokemon'
 import '../styles/pokemonEdit.scss'
 
 export default function NewPokemon () {
-  const [allPokemones, setAllPokemones] = useState<string[]>([])
-
-  const [imageLink, setImageLink] = useState('')
-  const [abilities, setAbilities] = useState<Array<{ id: number, name: string }>>([])
-  const [selectedPokemon, selectPokemon] = useState('')
-  const [evolution, setEvolution] = useState<PokemonResponse | null>(null)
-
-  useEffect(() => {
-    void getAll().then(res => setAllPokemones(res!))
-    return () => {
-      setAllPokemones([])
-    }
-  }, [])
-
-  useEffect(() => {
-    if (selectedPokemon === '') return
-    void getPokemonByName(selectedPokemon).then(res => setEvolution(res))
-    return () => {
-      setEvolution(null)
-    }
-  }, [selectedPokemon])
-
-  const newAbilityField = () => setAbilities(prev => [...prev, { name: '', id: (prev.at(-1)?.id ?? 0) + 1 }])
-  const deleteAbilityField = (id: number) => setAbilities(prev => prev.filter(a => a.id !== id))
+  const createOrEdit = useCreateOrEditPokemon()
 
   return (
     <Form method='POST' className="poke-pokemon-container">
@@ -41,7 +15,7 @@ export default function NewPokemon () {
           <span className="text">
             <h1>Information</h1>
           </span>
-          <PokemonItemEdit pokemon={null} sprite={imageLink} />
+          <PokemonItemEdit pokemon={null} sprite={createOrEdit.imageLink} />
         </div>
 
         <div className="sprites-container">
@@ -49,8 +23,8 @@ export default function NewPokemon () {
             <h1>Image</h1>
           </span>
           <div className="sprites">
-            <img src={imageLink} alt='Front sprite' className="front" />
-            <input name='pokemon-image' type="text" value={imageLink} onChange={e => setImageLink(e.target.value)} placeholder='image link' required />
+            <img src={createOrEdit.imageLink} alt='Front sprite' className="front" />
+            <input name='pokemon-image' type="text" value={createOrEdit.imageLink} onChange={e => createOrEdit.setImageLink(e.target.value)} placeholder='image link' required />
           </div>
         </div>
 
@@ -59,13 +33,13 @@ export default function NewPokemon () {
             <h1>Abilities</h1>
           </span>
           <div className="abilities">
-            {abilities.map((ability) => (
+            {createOrEdit.abilities.map((ability) => (
               <div key={ability.id} className='ability-container'>
-                <Input name='ability' className="ability-name" placeholder='Ability name' value={ability.name} required />
-                <button onClick={() => deleteAbilityField(ability.id)}>X</button>
+                <input name='ability' className="ability-name" placeholder='Ability name' defaultValue={ability.name} required />
+                <button onClick={() => createOrEdit.deleteAbilityField(ability.id)}>X</button>
               </div>
             ))}
-            <button onClick={newAbilityField}>Add ability field</button>
+            <button onClick={createOrEdit.newAbilityField}>Add ability field</button>
           </div>
         </div>
 
@@ -74,7 +48,7 @@ export default function NewPokemon () {
             <h1>Evolutions</h1>
           </span>
           <div className="evolutions">
-            <PokemonItemSearch selectPokemon={selectPokemon} allPokemones={allPokemones} pokemon={evolution} />
+            <PokemonItemSearch selectPokemon={createOrEdit.selectPokemon} allPokemones={createOrEdit.allPokemones} pokemon={createOrEdit.evolution} />
           </div>
         </div>
       </div>

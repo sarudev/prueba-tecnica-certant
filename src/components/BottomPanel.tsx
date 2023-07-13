@@ -1,9 +1,12 @@
+import { memo } from 'react'
 import '../styles/bottomPanel.scss'
 
-export default function BottomPanel ({ children }: { children: JSX.Element | JSX.Element[] }) {
+function BottomPanel ({ children }: { children: JSX.Element | JSX.Element[] }) {
   return (
     <div className="bottom-panel">
       {children}
     </div>
   )
 }
+
+export default memo(BottomPanel)

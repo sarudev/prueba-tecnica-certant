@@ -130,3 +130,5 @@ export interface CustomPokemon {
   pokeEvo: string
   pokeId: number
 }
+
+export type Nullable = null | undefined

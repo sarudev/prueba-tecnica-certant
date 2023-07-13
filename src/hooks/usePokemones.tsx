@@ -28,16 +28,18 @@ export default function usePokemones (get: number, startingPokemones: PokemonRes
     const response = await fetch(`${VITE_POKEAPI_URL}/pokemon?limit=${get}&offset=${offset.current}`, { signal: abortController?.signal })
     offset.current += get
     const data = await response.json() as SimplePokemonResponse
-    setPokemones(prevPokemones => [...prevPokemones, ...startingPokemones])
+
+    const pokes: PokemonResponse[] = startingPokemones
 
     for (const url of data.results) {
       const response = await fetch(url.url)
       const data = await response.json() as PokemonResponse
-      // pokemones insertados de 1 en 1 al array
-      // para que la animación sea fluida pero
-      //  de manera totalmente orgánica
-      setPokemones(prev => prev.some(p => p.id === data.id) ? prev : [...prev, data])
+
+      if (!pokes.some(p => p.id === data.id)) {
+        pokes.push(data)
+      }
     }
+    setPokemones(prev => [...prev, ...pokes])
   }
 
   return { pokemones, fetchMore }
