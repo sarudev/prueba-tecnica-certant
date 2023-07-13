@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { PokemonResponse, SimplePokemonResponse } from '../types/types'
 const { VITE_POKEAPI_URL } = import.meta.env as Record<string, string>
 
-export default function usePokemones (get: number) {
+export default function usePokemones (get: number, startingPokemones: PokemonResponse[]) {
   const [pokemones, setPokemones] = useState<PokemonResponse[]>([])
   const offset = useRef(0)
 
@@ -28,6 +28,7 @@ export default function usePokemones (get: number) {
     const response = await fetch(`${VITE_POKEAPI_URL}/pokemon?limit=${get}&offset=${offset.current}`, { signal: abortController?.signal })
     offset.current += get
     const data = await response.json() as SimplePokemonResponse
+    setPokemones(prevPokemones => [...prevPokemones, ...startingPokemones])
 
     for (const url of data.results) {
       const response = await fetch(url.url)
@@ -35,7 +36,7 @@ export default function usePokemones (get: number) {
       // pokemones insertados de 1 en 1 al array
       // para que la animación sea fluida pero
       //  de manera totalmente orgánica
-      setPokemones(prevPokemones => [...prevPokemones, data])
+      setPokemones(prev => prev.some(p => p.id === data.id) ? prev : [...prev, data])
     }
   }
 

@@ -29,7 +29,7 @@ form.poke-pokemon-container {
         gap: 5px;
         transform: translateX(200%);
 
-        @include animationMove(calc(#{$i} * 0.25s));
+        @include animationMove(calc(#{$i} * 0.2s));
       }
     }
 

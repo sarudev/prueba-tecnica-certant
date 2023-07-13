@@ -17,21 +17,21 @@ export interface PokemonResponse {
   id: number
   name: string
   base_experience: number
+  abilities: PokemonAbility[]
+  sprites: PokemonSprites
+  types: PokemonType[]
+  // stats: PokemonStat[]
   // height: number
   // is_default: boolean
   // order: number
   // weight: number
-  abilities: PokemonAbility[]
   // forms: NamedAPIResource[]
   // game_indices: VersionGameIndex[]
   // held_items: PokemonHeldItem[]
   // location_area_encounters: string
   // moves: PokemonMove[]
   // past_types: PokemonTypePast[]
-  sprites: PokemonSprites
   // species: NamedAPIResource[]
-  stats: PokemonStat[]
-  types: PokemonType[]
 }
 
 export interface PokemonAbility {
@@ -120,3 +120,13 @@ export interface PokemonSpecie {
 }
 
 export type PokemonTypes = 'normal' | 'fighting' | 'flying' | 'poison' | 'ground' | 'rock' | 'bug' | 'ghost' | 'steel' | 'fire' | 'water' | 'grass' | 'electric' | 'psychic' | 'ice' | 'dragon' | 'dark' | 'fairy' | 'shadow' | 'unknown'
+
+export interface CustomPokemon {
+  pokeName: string
+  pokeLvl: number
+  pokeImg: string
+  pokeTypes: string[]
+  pokeAbi: string[]
+  pokeEvo: string
+  pokeId: number
+}

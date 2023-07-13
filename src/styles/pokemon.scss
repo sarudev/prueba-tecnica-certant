@@ -29,7 +29,7 @@ div.poke-pokemon-container {
         gap: 5px;
         transform: translateX(200%);
 
-        @include animationMove(calc(#{$i} * 0.25s));
+        @include animationMove(calc(#{$i} * 0.2s));
       }
     }
 
@@ -72,7 +72,11 @@ div.poke-pokemon-container {
         align-items: center;
         flex-direction: column;
         gap: 5px;
-        padding: 5px;
+        padding: 10px;
+
+        .no-abilities {
+          color: #DC143C;
+        }
 
         > span {
           font-size: 1.2rem;

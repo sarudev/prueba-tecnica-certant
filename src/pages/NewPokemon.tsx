@@ -1,25 +1,20 @@
-import { Form, Link, useLoaderData, useParams } from 'react-router-dom'
-import { type PokemonLoaderData } from '../types/componentProps'
-import Status from './Status'
+import { Form, Link } from 'react-router-dom'
 import BottomPanel from '../components/BottomPanel'
 import { useEffect, useState } from 'react'
 import PokemonItemEdit from '../components/PokemonItemEdit'
 import Input from '../components/Input'
 import PokemonItemSearch from '../components/PokemonItemSearch'
 import { getAll, getPokemonByName } from '../utils/pokemon'
+import { type PokemonResponse } from '../types/types'
 import '../styles/pokemonEdit.scss'
 
-export default function EditPokemon () {
-  const { pokemon, evolutions } = useLoaderData() as PokemonLoaderData
-  const params = useParams()
+export default function NewPokemon () {
   const [allPokemones, setAllPokemones] = useState<string[]>([])
 
-  if (pokemon == null) return <Status code={404} goto='/' gotoMessage='Return to the Pokedex' statusMessage='Not Found' />
-
-  const [imageLink, setImageLink] = useState(pokemon.sprites.other['official-artwork'].front_default)
-  const [abilities, setAbilities] = useState<Array<{ id: number, name: string }>>(pokemon.abilities.map((a, i) => ({ id: i, name: a.ability.name })))
-  const [selectedPokemon, selectPokemon] = useState(evolutions[0]?.name ?? '')
-  const [evolution, setEvolution] = useState(evolutions[0])
+  const [imageLink, setImageLink] = useState('')
+  const [abilities, setAbilities] = useState<Array<{ id: number, name: string }>>([])
+  const [selectedPokemon, selectPokemon] = useState('')
+  const [evolution, setEvolution] = useState<PokemonResponse | null>(null)
 
   useEffect(() => {
     void getAll().then(res => setAllPokemones(res!))
@@ -30,9 +25,9 @@ export default function EditPokemon () {
 
   useEffect(() => {
     if (selectedPokemon === '') return
-    void getPokemonByName(selectedPokemon).then(res => setEvolution(res!))
+    void getPokemonByName(selectedPokemon).then(res => setEvolution(res))
     return () => {
-      setEvolution(evolutions[0])
+      setEvolution(null)
     }
   }, [selectedPokemon])
 
@@ -41,13 +36,12 @@ export default function EditPokemon () {
 
   return (
     <Form method='POST' className="poke-pokemon-container">
-      <input name='pokemon-id' value={pokemon.id} hidden />
       <div className="pokemon-container">
         <div className="poke-container">
           <span className="text">
             <h1>Information</h1>
           </span>
-          <PokemonItemEdit pokemon={pokemon} sprite={imageLink} />
+          <PokemonItemEdit pokemon={null} sprite={imageLink} />
         </div>
 
         <div className="sprites-container">
@@ -55,7 +49,7 @@ export default function EditPokemon () {
             <h1>Image</h1>
           </span>
           <div className="sprites">
-            <img src={imageLink} alt={`Front sprite of ${pokemon.name}`} className="front" />
+            <img src={imageLink} alt='Front sprite' className="front" />
             <input name='pokemon-image' type="text" value={imageLink} onChange={e => setImageLink(e.target.value)} placeholder='image link' required />
           </div>
         </div>
@@ -85,8 +79,8 @@ export default function EditPokemon () {
         </div>
       </div>
       <BottomPanel>
-        <Link to={`/pokedex/${params.id!}`}>Discard</Link>
-        <button type='submit'>Save</button>
+        <Link to='/pokedex'>Discard</Link>
+        <button type='submit'>Create</button>
       </BottomPanel>
     </Form>
   )

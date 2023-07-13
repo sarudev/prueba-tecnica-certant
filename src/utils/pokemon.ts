@@ -1,4 +1,4 @@
-import type { PokemonSpecie, PokemonResponse, PokemonEvolution, PokemonEvolutionResponse, PokemonTypes, SimplePokemonResponse } from '../types/types'
+import type { PokemonSpecie, PokemonResponse, PokemonEvolution, PokemonEvolutionResponse, PokemonTypes, SimplePokemonResponse, CustomPokemon } from '../types/types'
 
 const { VITE_POKEAPI_URL } = import.meta.env as Record<string, string>
 
@@ -24,8 +24,10 @@ export async function getPokemon (id: number) {
 export async function getPokemonByName (name: string) {
   const res = await fetch(`${VITE_POKEAPI_URL}/pokemon/${name}`)
   try {
-    return await res.json() as PokemonResponse
+    const result = await res.json() as PokemonResponse
+    return result
   } catch (e) {
+    console.error('not found')
     return null
   }
 }
@@ -103,16 +105,37 @@ async function getEvolutions (evoChain: PokemonEvolution, pokemonName: string) {
   }
 */
 
-interface CustomPokemon {
-  pokeName: string
-  pokeLvl: string
-  pokeImg: string
-  pokeTypes: string[]
-  pokeAbi: string[]
-  pokeEvo: string
+export function createPokemon (pokemon: Omit<CustomPokemon, 'pokeId'>) {
+  const customPokemon = getSavedPokemon()
+
+  let minId = 0
+  for (const poke of customPokemon) {
+    if (poke.pokeId < minId) minId = poke.pokeId
+  }
+
+  const newPoke: CustomPokemon = {
+    ...pokemon,
+    pokeId: minId - 1
+  }
+
+  customPokemon.push(newPoke)
+  window.localStorage.setItem('custom-pokemon', JSON.stringify(customPokemon))
 }
 
-export function savePokemon (pokemon: CustomPokemon) {
+export function editPokemon (pokemon: CustomPokemon) {
+  const customPokemon = getSavedPokemon()
+
+  const pokeIdx = customPokemon.findIndex(p => p.pokeId === pokemon.pokeId)
+
+  if (pokeIdx > -1) {
+    customPokemon.splice(pokeIdx, 1)
+  }
+
+  customPokemon.push(pokemon)
+  window.localStorage.setItem('custom-pokemon', JSON.stringify(customPokemon))
+}
+
+export function getSavedPokemon () {
   let customPokemonString = window.localStorage.getItem('custom-pokemon')
 
   if (customPokemonString == null) {
@@ -120,16 +143,7 @@ export function savePokemon (pokemon: CustomPokemon) {
     customPokemonString = '[]'
   }
 
-  const customPokemon = JSON.parse(customPokemonString) as CustomPokemon[]
-
-  const pokeIdx = customPokemon.findIndex(p => p.pokeName === pokemon.pokeName)
-
-  if (pokeIdx > -1) {
-    customPokemon.splice(pokeIdx, 1)
-  }
-  customPokemon.push(pokemon)
-
-  window.localStorage.setItem('custom-pokemon', JSON.stringify(customPokemon))
+  return JSON.parse(customPokemonString) as CustomPokemon[]
 }
 
 export const availibleTypes: PokemonTypes[] = [

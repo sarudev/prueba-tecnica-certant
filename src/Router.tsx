@@ -7,10 +7,12 @@ import { loader as loginLoader, action as loginAction } from './pages/router/Log
 import { loader as pokemonListLoader } from './pages/router/PokemonList'
 import { loader as pokemonLoader } from './pages/router/Pokemon'
 import { loader as logoutLoader } from './pages/router/Logout'
+import { action as pokemonEditAction } from './pages/router/PokemonEdit'
+import { action as pokemonNewAction } from './pages/router/PokemonNew'
 import Pokemon from './pages/Pokemon'
 import Status from './pages/Status'
 import EditPokemon from './pages/EditPokemon'
-import { availibleTypes, savePokemon } from './utils/pokemon'
+import NewPokemon from './pages/NewPokemon'
 
 const router = createBrowserRouter([
   {
@@ -41,27 +43,12 @@ const router = createBrowserRouter([
     path: '/pokedex/:id/edit',
     element: <Pokedex title='Edit Pokemon' element={<EditPokemon />} />,
     loader: pokemonLoader,
-    action: async ({ request }) => {
-      const form = await request.formData()
-      const pokeName = form.get('pokemon-name') as string
-      const pokeLvl = form.get('pokemon-lvl') as string
-      const pokeImg = form.get('pokemon-image') as string
-      const pokeAbi = form.getAll('ability') as string[]
-      const pokeEvo = form.get('pokemon-evolution') as string
-
-      const pokeTypes: string[] = []
-      for (const type of availibleTypes) {
-        const data = form.get(`type-${type}`)
-        if (data != null) {
-          pokeTypes.push(type)
-        }
-      }
-
-      const pokemon = { pokeName, pokeLvl, pokeImg, pokeTypes, pokeAbi, pokeEvo }
-      console.log(pokemon)
-      savePokemon(pokemon)
-      return null
-    }
+    action: pokemonEditAction
+  },
+  {
+    path: '/pokedex/new',
+    element: <Pokedex title='Edit Pokemon' element={<NewPokemon />} />,
+    action: pokemonNewAction
   },
   {
     path: '*',

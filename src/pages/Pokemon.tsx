@@ -36,7 +36,11 @@ export default function Pokemon () {
             <h1>Abilities</h1>
           </span>
           <div className="abilities">
-            {pokemon.abilities.map((ability) => <span key={ability.ability.name}>{firstUpper(ability.ability.name)}</span>)}
+            {
+              pokemon.abilities.length > 0
+                ? pokemon.abilities.map((ability) => <span key={ability.ability.name}>{firstUpper(ability.ability.name)}</span>)
+                : <span className='no-abilities'>This pokemon has no abilities</span>
+            }
           </div>
         </div>
 
@@ -47,7 +51,7 @@ export default function Pokemon () {
           <div className="evolutions">
             {
               evolutions.length > 0
-                ? evolutions.map((poke) => <a key={poke.id} href={`/pokedex/${poke.id}`}><PokemonItem pokemon={poke} /></a>)
+                ? evolutions.map((poke) => <Link key={poke.id} to={`/pokedex/${poke.id}`}><PokemonItem pokemon={poke} /></Link>)
                 : <span className='no-evolution'>This pokemon has no evolutions</span>
             }
           </div>

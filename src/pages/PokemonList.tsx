@@ -2,12 +2,14 @@ import usePokemones from '../hooks/usePokemones'
 import PokemonItem from '../components/PokemonItem'
 import useInfiniteScroll from '../hooks/useInfiniteScroll'
 import { PokemonItemWithoutTypeText } from '../components/PokemonItemWithoutTypeText'
-import { Link } from 'react-router-dom'
-import '../styles/pokemonList.scss'
+import { Link, useLoaderData } from 'react-router-dom'
 import BottomPanel from '../components/BottomPanel'
+import { type PokemonResponse } from '../types/types'
+import '../styles/pokemonList.scss'
 
 export default function PokemonList () {
-  const { pokemones, fetchMore } = usePokemones(10)
+  const pokes = useLoaderData() as PokemonResponse[]
+  const { pokemones, fetchMore } = usePokemones(10, pokes)
   const { pokeListRef, handleScroll } = useInfiniteScroll(fetchMore)
 
   return (

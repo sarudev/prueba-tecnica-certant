@@ -6,7 +6,7 @@ import { PokemonTypeText } from './PokemonTypeName'
 import '../styles/pokemonItem.scss'
 
 export default function PokemonItem ({ pokemon }: { pokemon: PokemonResponse }) {
-  const types = useMemo(() => pokemon.types.map(t => t.type.name), [])
+  const types = useMemo(() => pokemon?.types.map(t => t.type.name) ?? [], [])
 
   const textTypesRef = useHoverTypeText(types)
 
