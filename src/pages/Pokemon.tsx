@@ -1,10 +1,10 @@
 import { Link, useLoaderData, useParams } from 'react-router-dom'
 import PokemonItem from '../components/PokemonItem'
-import '../styles/pokemon.scss'
 import { firstUpper } from '../utils/text'
 import { type PokemonLoaderData } from '../types/componentProps'
 import Status from './Status'
 import BottomPanel from '../components/BottomPanel'
+import '../styles/pokemon.scss'
 
 export default function Pokemon () {
   const { pokemon, evolutions } = useLoaderData() as PokemonLoaderData

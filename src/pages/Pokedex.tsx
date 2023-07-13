@@ -1,9 +1,13 @@
 import useHeadTitle from '../hooks/useHeadTitle'
-import { type PokedexProps } from '../types/componentProps'
+import { type PokemonLoaderData, type PokedexProps } from '../types/componentProps'
 import '../styles/pokedex.scss'
+import { useLoaderData } from 'react-router-dom'
+import { firstUpper } from '../utils/text'
 
 export default function Pokedex ({ title, element, bottomPanel }: PokedexProps) {
-  useHeadTitle(`Pokedex - ${title}`)
+  const data = useLoaderData() as PokemonLoaderData
+
+  useHeadTitle(`Pokedex - ${firstUpper(data?.pokemon?.name ?? title)}`)
 
   return (
     <div className='pokedex-container'>
