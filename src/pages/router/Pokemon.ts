@@ -14,7 +14,7 @@ export async function loader ({ params }: LoaderFunctionArgs) {
     if (isNaN(id)) return notFound
 
     const pokemones = getSavedPokemon()
-    console.log(pokemones)
+
     const poke = pokemones.find(p => p.pokemon.id === id)
     const pokemon = poke?.pokemon ?? await getPokemon(id)
 
@@ -23,16 +23,17 @@ export async function loader ({ params }: LoaderFunctionArgs) {
     let evolutions: PokemonResponse[] | null = []
     try {
       if (poke != null) {
-        if (poke.evolution !== '')
-          evolutions = [(await getPokemonByName(poke.evolution))!]
+        if (poke.evolution !== '') {
+          const local = getSavedPokemon().find(p => p.pokemon.name === poke.evolution)?.pokemon ?? await getPokemonByName(poke.evolution)
+          evolutions = local != null ? [local] : []
+        }
       } else if (id > -1)
         evolutions = await nextEvolution(id)
     } catch (e) {
       console.error(e)
       return notFound
     }
-    console.log({ poke })
-    console.log({ pokemon, evolutions })
+    console.log({ pokemon, evolutions, evoName: poke?.evolution })
     return { pokemon, evolutions } as PokemonLoaderData
   } else
     return redirect('/login')

@@ -1,20 +1,10 @@
 import { useEffect, useState } from 'react'
 import { type Nullable, type PokemonResponse } from '../types/types'
-import { getAll, getPokemonByName } from '../utils/pokemon'
-
-interface useCreateOrEditPokemonProps {
-  initialEvolution?: PokemonResponse
-  initialSprite?: string
-  initialAbilities?: Ability[]
-}
-
-interface Ability {
-  id: number
-  name: string
-}
+import { getAll, getPokemonByName, getSavedPokemon } from '../utils/pokemon'
+import { type Ability, type useCreateOrEditPokemonProps } from '../types/componentProps'
 
 export default function useCreateOrEditPokemon ({ initialEvolution, initialSprite, initialAbilities }: useCreateOrEditPokemonProps = {}) {
-  const [allPokemones, setAllPokemones] = useState<string[]>([])
+  const [allPokemones, setAllPokemones] = useState<Array<{ id: number, name: string }>>([])
 
   const [imageLink, setImageLink] = useState(initialSprite ?? '')
   const [abilities, setAbilities] = useState<Ability[]>(initialAbilities ?? [])
@@ -22,7 +12,20 @@ export default function useCreateOrEditPokemon ({ initialEvolution, initialSprit
   const [evolution, setEvolution] = useState<PokemonResponse | Nullable>(initialEvolution)
 
   useEffect(() => {
-    void getAll().then(res => setAllPokemones(res!))
+    void getAll().then(res => {
+      if (res == null) return
+
+      const pokes = getSavedPokemon()
+      const list = res
+
+      for (const p of pokes) {
+        if (!list.some(po => po.id === p.pokemon.id)) {
+          list.push({ name: p.pokemon.name, id: p.pokemon.id })
+        }
+      }
+
+      setAllPokemones(list)
+    })
     return () => {
       setAllPokemones([])
     }
@@ -33,7 +36,13 @@ export default function useCreateOrEditPokemon ({ initialEvolution, initialSprit
       setEvolution(null)
       return
     }
-    void getPokemonByName(selectedPokemon).then(res => setEvolution(res))
+    void getPokemonByName(selectedPokemon).then(res => {
+      let poke: PokemonResponse | Nullable = res
+      if (poke == null) {
+        poke = getSavedPokemon().find(p => p.pokemon.name === selectedPokemon)?.pokemon
+      }
+      setEvolution(poke)
+    })
     return () => {
       setEvolution(null)
     }

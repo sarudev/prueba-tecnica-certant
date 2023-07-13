@@ -1,11 +1,11 @@
-import { type Nullable, type PokemonResponse } from '../types/types'
 import { memo, useMemo, useState } from 'react'
 import { PokemonTypeText } from './PokemonTypeName'
 import { generateBackgroundColor } from '../utils/colors'
 import PokemonSearchList from './PokemonSearchList'
 import '../styles/pokemonItemSearch.scss'
+import { type PokemonItemSearchProps } from '../types/componentProps'
 
-function PokemonItemSearch ({ pokemon, allPokemones, selectPokemon }: { pokemon: PokemonResponse | Nullable, allPokemones: string[], selectPokemon: React.Dispatch<React.SetStateAction<string>> }) {
+function PokemonItemSearch ({ pokemon, allPokemones, selectPokemon }: PokemonItemSearchProps) {
   const types = useMemo(() => pokemon?.types.map(t => t.type.name), [pokemon])
 
   const [searchFocused, setFocused] = useState(false)

@@ -1,11 +1,11 @@
-import { type PokemonTypes, type PokemonResponse } from '../types/types'
+import { type PokemonTypes, type PokemonResponse, type Nullable } from '../types/types'
 import { memo, useState } from 'react'
 import { generateBackgroundColor } from '../utils/colors'
 import TypeCheckbox from './TypeCheckbox'
 import { availibleTypes } from '../utils/pokemon'
 import '../styles/pokemonItemEdit.scss'
 
-function PokemonItemEdit ({ pokemon, sprite }: { pokemon: PokemonResponse | null, sprite: string }) {
+function PokemonItemEdit ({ pokemon, sprite }: { pokemon: PokemonResponse | Nullable, sprite: string }) {
   const [types, setTypes] = useState<PokemonTypes[]>([...(pokemon?.types.map(t => t.type.name) ?? [])])
   const [typesListVisible, toggle] = useState(false)
 

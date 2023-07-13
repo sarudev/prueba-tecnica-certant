@@ -6,7 +6,7 @@ export async function getAll () {
   const res = await fetch(`${VITE_POKEAPI_URL}/pokemon?limit=10000`)
   try {
     const data = await res.json() as SimplePokemonResponse
-    return data.results.map(p => p.name)
+    return data.results.map((p, id) => ({ name: p.name, id }))
   } catch (e) {
     return null
   }
@@ -172,8 +172,9 @@ export async function createCustom (form: FormData): Promise<Omit<CustomPokemon,
   let pokeEvo = form.get('pokemon-evolution') as string
 
   const evo = await getPokemonByName(pokeEvo)
-  console.log({ evo, pokeEvo })
-  if (evo == null) {
+  const evoCustom = getSavedPokemon().find(p => p.pokemon.name === pokeEvo)
+
+  if (evo == null && evoCustom == null) {
     pokeEvo = ''
   }
 

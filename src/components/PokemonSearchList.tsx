@@ -1,9 +1,10 @@
 import { memo, useMemo } from 'react'
 import PokemonSearchItem from './PokemonSearchItem'
+import { type PokemonSearchListProps } from '../types/componentProps'
 
-function PokemonSearchList ({ search, setSearch, allPokemones, selectPokemon }: { search: string, setSearch: React.Dispatch<React.SetStateAction<string>>, allPokemones: string[], selectPokemon: React.Dispatch<React.SetStateAction<string>> }) {
+function PokemonSearchList ({ search, setSearch, allPokemones, selectPokemon }: PokemonSearchListProps) {
   const list = useMemo(() => {
-    return allPokemones.filter(p => p.startsWith(search)).map((p, i) => i < 5 ? <PokemonSearchItem selectPokemon={selectPokemon} setSearch={setSearch} key={p} text={p}/> : null).filter(p => p != null)
+    return allPokemones.filter(p => p.name.startsWith(search)).map((p, i) => i < 5 ? <PokemonSearchItem selectPokemon={selectPokemon} setSearch={setSearch} key={p.id} text={p.name}/> : null).filter(p => p != null)
   }, [search, allPokemones])
 
   return list.length < 1
