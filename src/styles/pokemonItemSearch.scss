@@ -1,0 +1,40 @@
+@import './scss/variables.scss';
+@import './scss/mixin.scss';
+
+.search.pokeitem {
+  position: relative;
+
+  .search-evolution {
+    width: 100%;
+
+    &::placeholder {
+      color: cornflowerblue;
+    }
+
+    &:focus,
+    &:hover {
+      outline: none;
+      border-color: cornflowerblue;
+    }
+  }
+
+  .search-list {
+    position: absolute;
+    background-color: whitesmoke;
+    width: calc(100% - 20px);
+    height: max-content;
+    padding: 10px;
+    bottom: 125%;
+    gap: 5px;
+
+    .search-item {
+      width: 100%;
+      padding: 5px;
+      cursor: pointer;
+
+      &:hover {
+        outline: 1px solid cornflowerblue;
+      }
+    }
+  }
+}

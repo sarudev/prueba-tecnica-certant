@@ -31,7 +31,7 @@ interface AnchorData {
 interface ButtonData {
   type: 'button'
   text: string
-  onClick: React.MouseEventHandler<HTMLButtonElement>
+  onClick: unknown
 }
 
 export type BottomPanelData = AnchorData | ButtonData

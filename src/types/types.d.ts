@@ -78,7 +78,10 @@ export interface NamedAPIResource {
 
 export interface PokemonType {
   slot: number
-  type: NamedAPIResource
+  type: {
+    name: PokemonTypes
+    url: string
+  }
 }
 
 export interface PokemonSprites {
@@ -115,3 +118,5 @@ export interface PokemonSpecie {
     url: string
   }
 }
+
+export type PokemonTypes = 'normal' | 'fighting' | 'flying' | 'poison' | 'ground' | 'rock' | 'bug' | 'ghost' | 'steel' | 'fire' | 'water' | 'grass' | 'electric' | 'psychic' | 'ice' | 'dragon' | 'dark' | 'fairy' | 'shadow' | 'unknown'

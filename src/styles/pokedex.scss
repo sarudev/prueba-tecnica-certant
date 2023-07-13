@@ -24,43 +24,4 @@
     flex: 1 0 0;
     overflow: hidden;
   }
-
-  .bottom-panel {
-    width: 100%;
-    height: max-content;
-    padding: 10px;
-    border-top: $border;
-    display: flex;
-    gap: 10px;
-
-    > * {
-      flex: 1 0 0;
-      padding: 5px;
-      border-radius: 5px;
-      cursor: pointer;
-      text-align: center;
-      text-decoration: none;
-    }
-
-    > *:nth-child(odd) {
-      background-color: #ffffff;
-      color: #6495ed;
-      outline: 1px solid #6495ed;
-
-      &:hover {
-        background-color: #ececec;
-        color: #6495ed;
-      }
-    }
-
-    > *:nth-child(even) {
-      background-color: #6495ed;
-      color: #ffffff;
-
-      &:hover {
-        background-color: #5781ce;
-        color: #ffffff;
-      }
-    }
-  }
 }
