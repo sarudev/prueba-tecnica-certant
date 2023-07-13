@@ -25,11 +25,11 @@ export default function usePokemones (get: number, startingPokemones: PokemonRes
   }, [])
 
   const fetchMore = async (abortController?: AbortController) => {
+    const pokes: PokemonResponse[] = offset.current === 0 ? startingPokemones : []
+
     const response = await fetch(`${VITE_POKEAPI_URL}/pokemon?limit=${get}&offset=${offset.current}`, { signal: abortController?.signal })
     offset.current += get
     const data = await response.json() as SimplePokemonResponse
-
-    const pokes: PokemonResponse[] = startingPokemones
 
     for (const url of data.results) {
       const response = await fetch(url.url)
