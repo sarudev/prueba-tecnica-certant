@@ -3,7 +3,7 @@ import { type Nullable, type PokemonResponse } from '../types/types'
 import { getAll, getPokemonByName, getSavedPokemon } from '../utils/pokemon'
 import { type Ability, type useCreateOrEditPokemonProps } from '../types/componentProps'
 
-export default function useCreateOrEditPokemon ({ initialEvolution, initialSprite, initialAbilities }: useCreateOrEditPokemonProps = {}) {
+export default function useCreateOrEditPokemon ({ pokemonName, initialEvolution, initialSprite, initialAbilities }: useCreateOrEditPokemonProps = {}) {
   const [allPokemones, setAllPokemones] = useState<Array<{ id: number, name: string }>>([])
 
   const [imageLink, setImageLink] = useState(initialSprite ?? '')
@@ -13,18 +13,15 @@ export default function useCreateOrEditPokemon ({ initialEvolution, initialSprit
 
   useEffect(() => {
     void getAll().then(res => {
-      if (res == null) return
+      const list = getSavedPokemon().map(p => ({ name: p.pokemon.name, id: p.pokemon.id }))
 
-      const pokes = getSavedPokemon()
-      const list = res
-
-      for (const p of pokes) {
-        if (!list.some(po => po.id === p.pokemon.id)) {
-          list.push({ name: p.pokemon.name, id: p.pokemon.id })
+      if (res != null) {
+        for (const poke of res) {
+          if (!list.some(p => p.id === poke.id)) list.push(poke)
         }
       }
 
-      setAllPokemones(list)
+      setAllPokemones(list.filter(p => p.name !== (pokemonName ?? '')))
     })
     return () => {
       setAllPokemones([])

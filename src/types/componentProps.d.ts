@@ -30,6 +30,7 @@ export interface PokemonContainerInputsProps {
 }
 
 export interface useCreateOrEditPokemonProps {
+  pokemonName?: string
   initialEvolution?: PokemonResponse
   initialSprite?: string
   initialAbilities?: Ability[]

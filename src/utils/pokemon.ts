@@ -6,7 +6,7 @@ export async function getAll () {
   const res = await fetch(`${VITE_POKEAPI_URL}/pokemon?limit=10000`)
   try {
     const data = await res.json() as SimplePokemonResponse
-    return data.results.map((p, id) => ({ name: p.name, id }))
+    return data.results.map((p) => ({ name: p.name, id: Number(p.url.split('/').at(-2)) }))
   } catch (e) {
     return null
   }
@@ -108,7 +108,7 @@ async function getEvolutions (evoChain: PokemonEvolution, pokemonName: string) {
 export function createPokemon (pokemon: Omit<CustomPokemon, 'pokeId'>) {
   const customPokemon = getSavedPokemon()
 
-  let minId = 0
+  let minId = -1
   for (const poke of customPokemon) {
     if (poke.pokemon.id < minId) minId = poke.pokemon.id
   }
@@ -127,9 +127,7 @@ export function editPokemon (pokemon: CustomPokemon) {
 
   const pokeIdx = customPokemon.findIndex(p => p.pokemon.id === pokemon.pokeId)
 
-  if (pokeIdx > -1) {
-    customPokemon.splice(pokeIdx, 1)
-  }
+  if (pokeIdx > -1) customPokemon.splice(pokeIdx, 1)
 
   customPokemon.push({ pokemon: convert(pokemon), evolution: pokemon.pokeEvo })
   window.localStorage.setItem('custom-pokemon', JSON.stringify(customPokemon))

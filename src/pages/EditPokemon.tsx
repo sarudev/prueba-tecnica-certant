@@ -14,6 +14,7 @@ export default function EditPokemon () {
   if (pokemon == null) return <Status code={404} goto='/' gotoMessage='Return to the Pokedex' statusMessage='Not Found' />
 
   const createOrEdit = useCreateOrEditPokemon({
+    pokemonName: pokemon.name,
     initialEvolution: evolutions[0],
     initialAbilities: pokemon.abilities.map((a, i) => ({ id: i, name: a.ability.name })),
     initialSprite: pokemon.sprites.other['official-artwork'].front_default
